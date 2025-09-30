@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Latest News 2025 - News Portal</title>
+  <meta name="description" content="Dapatkan berita terbaru dari seluruh dunia, mulai dari teknologi, olahraga, hiburan hingga kesehatan, update setiap hari.">
+  <meta name="robots" content="index, follow">
+  
+  <!-- JSON-LD for Google News -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    "headline": "Latest News 2025",
+    "image": "https://example.com/logo.png",
+    "datePublished": "2025-09-30T10:00:00Z",
+    "author": { "@type": "Person", "name": "News Portal" },
+    "publisher": { "@type": "Organization", "name": "News Portal", "logo": "https://example.com/logo.png" }
+  }
+  </script>
+
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f4f4f4; }
+    header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: linear-gradient(90deg,#3498db,#2980b9); color: #fff; position: sticky; top: 0; flex-wrap: wrap; }
+    header .logo { font-size: 1.5em; font-weight: bold; }
+    header nav a { color: #fff; text-decoration: none; margin-left: 20px; font-weight: 500; cursor: pointer; }
+    header nav a:hover { color: #ffeb3b; }
+    main { padding: 20px; }
+    #news-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); gap: 20px; }
+    .news-item { background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.1); display:flex; flex-direction:column; }
+    .news-image { width:100%; height:180px; object-fit:cover; }
+    .news-content { padding:15px; flex:1; display:flex; flex-direction:column; justify-content:space-between; }
+    .news-title { font-size:1.1em; font-weight:bold; color:#3498db; margin-bottom:8px; }
+    .news-source { font-size:0.8em; color:#888; margin-bottom:10px; }
+    .news-description { flex:1; font-size:0.95em; color:#555; margin-bottom:10px; }
+    .news-link { text-decoration:none; color:#fff; background:#3498db; padding:8px 12px; border-radius:5px; text-align:center; }
+    .news-link:hover { background:#2980b9; }
+    footer { text-align:center; padding:15px; background:#333; color:#fff; margin-top:20px; }
+    .ad-banner { background:#ffeb3b; color:#333; text-align:center; padding:15px; margin:20px 0; border-radius:10px; font-weight:bold; font-size:1.1em; grid-column:1/-1; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">News Portal</div>
+    <nav>
+      <a data-category="all">Home</a>
+      <a data-category="business">Business</a>
+      <a data-category="entertainment">Entertainment</a>
+      <a data-category="sports">Sports</a>
+      <a data-category="technology">Technology</a>
+      <a data-category="health">Health</a>
+      <a data-category="science">Science</a>
+    </nav>
+  </header>
+
+  <main>
+    <div id="news-container"></div>
+  </main>
+
+  <footer>
+    &copy; 2025 News Portal. All rights reserved.
+  </footer>
+
+  <script>
+    const apiKey = '93c7202acd479c8981a628ddda5fa1f1';
+    const container = document.getElementById('news-container');
+
+    function fetchNews(category) {
+      let url = `https://api.mediastack.com/v1/news?access_key=${apiKey}&countries=us&languages=en&limit=50`;
+      if(category && category!=='all') url += `&categories=${category}`;
+      fetch(url)
+        .then(res => res.json())
+        .then(data => renderArticles(data.data))
+        .catch(err => console.error(err));
+    }
+
+    function renderArticles(articles){
+      container.innerHTML = '';
+      articles.forEach(article=>{
+        const div=document.createElement('div');
+        div.classList.add('news-item');
+        div.innerHTML=`
+          ${article.image ? `<img class="news-image" src="${article.image}" alt="News Image">` : ''}
+          <div class="news-content">
+            <h2 class="news-title">${article.title}</h2>
+            <div class="news-source">${article.source} - ${new Date(article.published_at).toLocaleString()}</div>
+            <p class="news-description">${article.description || ''}</p>
+            <a class="news-link" href="${article.url}" target="_blank">Read More</a>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    // Initial load
+    fetchNews('all');
+
+    document.querySelectorAll('header nav a').forEach(link=>{
+      link.addEventListener('click', ()=>{
+        const category=link.getAttribute('data-category');
+        fetchNews(category);
+      });
+    });
+  </script>
+</body>
+</html>
